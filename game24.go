@@ -5,6 +5,11 @@
 // Credits: http://rosettacode.org/wiki/24_game/Solve#Go
 ////////////////////////////////////////////////////////////////////////////
 
+/*
+package game24 provides fast solution to the 24 game
+*/
+
+//package game24
 package main
 
 import (
@@ -25,8 +30,8 @@ type frac struct {
 	num, denom int
 }
 
-// Expression: can either be a single number, or a result of binary
-// operation from left and right node
+// Expr is for Expression: it can either be a single number, or a result of
+// binary operation from left and right node
 type Expr struct {
 	op          int
 	left, right *Expr
@@ -37,6 +42,7 @@ var n_cards = 4
 var goal = 24
 var digit_range = 9
 
+// String will convert the expression tree into infix expression string.
 func (x *Expr) String() string {
 	if x.op == op_num {
 		return fmt.Sprintf("%d", x.value.num)
@@ -104,7 +110,8 @@ func expr_eval(x *Expr) (f frac) {
 	return
 }
 
-func solve(ex_in []*Expr) bool {
+// Solve is key function to solve the 24 game
+func Solve(ex_in []*Expr) bool {
 	// only one expression left, meaning all numbers are arranged into
 	// a binary tree, so evaluate and see if we get 24
 	if len(ex_in) == 1 {
@@ -132,7 +139,7 @@ func solve(ex_in []*Expr) bool {
 			// try all 4 operators
 			for o := op_add; o <= op_div; o++ {
 				node.op = o
-				if solve(ex) {
+				if Solve(ex) {
 					return true
 				}
 			}
@@ -142,12 +149,12 @@ func solve(ex_in []*Expr) bool {
 			node.right = ex_in[i]
 
 			node.op = op_sub
-			if solve(ex) {
+			if Solve(ex) {
 				return true
 			}
 
 			node.op = op_div
-			if solve(ex) {
+			if Solve(ex) {
 				return true
 			}
 
@@ -160,7 +167,8 @@ func solve(ex_in []*Expr) bool {
 	return false
 }
 
-func main() {
+// Play is for playing the game
+func Play() {
 	cards := make([]*Expr, n_cards)
 	rand.Seed(time.Now().Unix())
 
@@ -171,8 +179,12 @@ func main() {
 			fmt.Printf(" %d", cards[i].value.num)
 		}
 		fmt.Print(":  ")
-		if !solve(cards) {
+		if !Solve(cards) {
 			fmt.Println("No solution")
 		}
 	}
+}
+
+func main() {
+	Play()
 }
