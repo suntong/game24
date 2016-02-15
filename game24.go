@@ -20,11 +20,11 @@ import (
 // Constant and data type/structure definitions
 
 const (
-	Op_num = iota
-	Op_add
-	Op_sub
-	Op_mul
-	Op_div
+	op_num = iota
+	op_add
+	op_sub
+	op_mul
+	op_div
 )
 
 // Expr is for Expression: it can either be a single number, or a result of
@@ -45,8 +45,8 @@ var goal = 24
 // Function definitions
 
 // NewExpr is the factory function for initialization.
-func NewExpr(op int, left, right *Expr, value int) *Expr {
-	return &Expr{op, left, right, value}
+func NewExpr(value int) *Expr {
+	return &Expr{op: op_num, value: value}
 }
 
 // Value returns the value store in the given Expr structure.
@@ -56,34 +56,34 @@ func (x *Expr) Value() int {
 
 // String will convert the expression tree into infix expression string.
 func (x *Expr) String() string {
-	if x.op == Op_num {
+	if x.op == op_num {
 		return fmt.Sprintf("%d", x.value)
 	}
 
 	var bl1, br1, bl2, br2, opstr string
 	switch {
-	case x.left.op == Op_num:
+	case x.left.op == op_num:
 	case x.left.op >= x.op:
-	case x.left.op == Op_add && x.op == Op_sub:
+	case x.left.op == op_add && x.op == op_sub:
 		bl1, br1 = "", ""
 	default:
 		bl1, br1 = "(", ")"
 	}
 
-	if x.right.op == Op_num || x.op < x.right.op {
+	if x.right.op == op_num || x.op < x.right.op {
 		bl2, br2 = "", ""
 	} else {
 		bl2, br2 = "(", ")"
 	}
 
 	switch {
-	case x.op == Op_add:
+	case x.op == op_add:
 		opstr = " + "
-	case x.op == Op_sub:
+	case x.op == op_sub:
 		opstr = " - "
-	case x.op == Op_mul:
+	case x.op == op_mul:
 		opstr = " * "
-	case x.op == Op_div:
+	case x.op == op_div:
 		opstr = " / "
 	}
 
@@ -92,7 +92,7 @@ func (x *Expr) String() string {
 }
 
 func expr_eval(x *Expr) (ret int, ok bool) {
-	if x.op == Op_num {
+	if x.op == op_num {
 		return x.value, true
 	}
 
@@ -103,16 +103,16 @@ func expr_eval(x *Expr) (ret int, ok bool) {
 	}
 
 	switch x.op {
-	case Op_add:
+	case op_add:
 		return l + r, true
 
-	case Op_sub:
+	case op_sub:
 		return l - r, true
 
-	case Op_mul:
+	case op_mul:
 		return l * r, true
 
-	case Op_div:
+	case op_div:
 		if r == 0 || l%r != 0 {
 			return 0, false
 		}
@@ -148,7 +148,7 @@ func Solve(ex_in []*Expr) bool {
 			node.right = ex_in[j]
 
 			// try all 4 operators
-			for o := Op_add; o <= Op_div; o++ {
+			for o := op_add; o <= op_div; o++ {
 				node.op = o
 				if Solve(ex) {
 					return true
@@ -159,12 +159,12 @@ func Solve(ex_in []*Expr) bool {
 			node.left = ex_in[j]
 			node.right = ex_in[i]
 
-			node.op = Op_sub
+			node.op = op_sub
 			if Solve(ex) {
 				return true
 			}
 
-			node.op = Op_div
+			node.op = op_div
 			if Solve(ex) {
 				return true
 			}

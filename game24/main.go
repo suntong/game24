@@ -28,8 +28,7 @@ func Play() {
 
 	for k := 0; k < 10; k++ {
 		for i := 0; i < n_cards; i++ {
-			cards[i] =
-				game24.NewExpr(game24.Op_num, nil, nil, rand.Intn(digit_range-1)+1)
+			cards[i] = game24.NewExpr(rand.Intn(digit_range-1) + 1)
 			fmt.Printf(" %d", cards[i].Value())
 		}
 		fmt.Print(":  ")
