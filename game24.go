@@ -18,6 +18,9 @@ import (
 	"time"
 )
 
+////////////////////////////////////////////////////////////////////////////
+// Constant and data type/structure definitions
+
 const (
 	op_num = iota
 	op_add
@@ -25,6 +28,8 @@ const (
 	op_mul
 	op_div
 )
+
+const digit_range = 9
 
 // Expr is for Expression: it can either be a single number, or a result of
 // binary operation from left and right node
@@ -34,9 +39,14 @@ type Expr struct {
 	value       int
 }
 
+////////////////////////////////////////////////////////////////////////////
+// Global variables definitions
+
 var n_cards = 4
 var goal = 24
-var digit_range = 9
+
+////////////////////////////////////////////////////////////////////////////
+// Function definitions
 
 // String will convert the expression tree into infix expression string.
 func (x *Expr) String() string {
