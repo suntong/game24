@@ -9,27 +9,22 @@
 package game24 provides fast solution to the 24 game
 */
 
-//package game24
-package main
+package game24
 
 import (
 	"fmt"
-	"math/rand"
-	"time"
 )
 
 ////////////////////////////////////////////////////////////////////////////
 // Constant and data type/structure definitions
 
 const (
-	op_num = iota
-	op_add
-	op_sub
-	op_mul
-	op_div
+	Op_num = iota
+	Op_add
+	Op_sub
+	Op_mul
+	Op_div
 )
-
-const digit_range = 9
 
 // Expr is for Expression: it can either be a single number, or a result of
 // binary operation from left and right node
@@ -48,36 +43,46 @@ var goal = 24
 ////////////////////////////////////////////////////////////////////////////
 // Function definitions
 
+// NewExpr is the factory function for initialization.
+func NewExpr(op int, left, right *Expr, value int) *Expr {
+	return &Expr{op, left, right, value}
+}
+
+// Value returns the value store in the given Expr structure.
+func (x *Expr) Value() int {
+	return x.value
+}
+
 // String will convert the expression tree into infix expression string.
 func (x *Expr) String() string {
-	if x.op == op_num {
+	if x.op == Op_num {
 		return fmt.Sprintf("%d", x.value)
 	}
 
 	var bl1, br1, bl2, br2, opstr string
 	switch {
-	case x.left.op == op_num:
+	case x.left.op == Op_num:
 	case x.left.op >= x.op:
-	case x.left.op == op_add && x.op == op_sub:
+	case x.left.op == Op_add && x.op == Op_sub:
 		bl1, br1 = "", ""
 	default:
 		bl1, br1 = "(", ")"
 	}
 
-	if x.right.op == op_num || x.op < x.right.op {
+	if x.right.op == Op_num || x.op < x.right.op {
 		bl2, br2 = "", ""
 	} else {
 		bl2, br2 = "(", ")"
 	}
 
 	switch {
-	case x.op == op_add:
+	case x.op == Op_add:
 		opstr = " + "
-	case x.op == op_sub:
+	case x.op == Op_sub:
 		opstr = " - "
-	case x.op == op_mul:
+	case x.op == Op_mul:
 		opstr = " * "
-	case x.op == op_div:
+	case x.op == Op_div:
 		opstr = " / "
 	}
 
@@ -86,7 +91,7 @@ func (x *Expr) String() string {
 }
 
 func expr_eval(x *Expr) (ret int, ok bool) {
-	if x.op == op_num {
+	if x.op == Op_num {
 		return x.value, true
 	}
 
@@ -97,16 +102,16 @@ func expr_eval(x *Expr) (ret int, ok bool) {
 	}
 
 	switch x.op {
-	case op_add:
+	case Op_add:
 		return l + r, true
 
-	case op_sub:
+	case Op_sub:
 		return l - r, true
 
-	case op_mul:
+	case Op_mul:
 		return l * r, true
 
-	case op_div:
+	case Op_div:
 		if r == 0 || l%r != 0 {
 			return 0, false
 		}
@@ -142,7 +147,7 @@ func Solve(ex_in []*Expr) bool {
 			node.right = ex_in[j]
 
 			// try all 4 operators
-			for o := op_add; o <= op_div; o++ {
+			for o := Op_add; o <= Op_div; o++ {
 				node.op = o
 				if Solve(ex) {
 					return true
@@ -153,12 +158,12 @@ func Solve(ex_in []*Expr) bool {
 			node.left = ex_in[j]
 			node.right = ex_in[i]
 
-			node.op = op_sub
+			node.op = Op_sub
 			if Solve(ex) {
 				return true
 			}
 
-			node.op = op_div
+			node.op = Op_div
 			if Solve(ex) {
 				return true
 			}
@@ -170,25 +175,4 @@ func Solve(ex_in []*Expr) bool {
 		ex[i] = ex_in[i]
 	}
 	return false
-}
-
-// Play is for playing the game
-func Play() {
-	cards := make([]*Expr, n_cards)
-	rand.Seed(time.Now().Unix())
-
-	for k := 0; k < 10; k++ {
-		for i := 0; i < n_cards; i++ {
-			cards[i] = &Expr{op_num, nil, nil, rand.Intn(digit_range-1) + 1}
-			fmt.Printf(" %d", cards[i].value)
-		}
-		fmt.Print(":  ")
-		if !Solve(cards) {
-			fmt.Println("No solution")
-		}
-	}
-}
-
-func main() {
-	Play()
 }
