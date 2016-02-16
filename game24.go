@@ -19,6 +19,8 @@ import (
 ////////////////////////////////////////////////////////////////////////////
 // Constant and data type/structure definitions
 
+const calc_range = 99
+
 const (
 	op_num = iota
 	op_add
@@ -41,8 +43,33 @@ type Expr struct {
 var n_cards = 4
 var goal = 24
 
+var calc [op_div + 1][calc_range + 1][calc_range + 1]int
+
 ////////////////////////////////////////////////////////////////////////////
 // Function definitions
+
+func init() {
+	for op := op_add; op <= op_div; op++ {
+		for i := 0; i <= calc_range; i++ {
+			for j := 0; j <= calc_range; j++ {
+				switch {
+				case op == op_add:
+					calc[op][i][j] = i + j
+				case op == op_sub:
+					calc[op][i][j] = i - j
+				case op == op_mul:
+					calc[op][i][j] = i * j
+				case op == op_div:
+					if j == 0 || i%j != 0 {
+						calc[op][i][j] = -1
+					} else {
+						calc[op][i][j] = i / j
+					}
+				}
+			}
+		}
+	}
+}
 
 // NewExpr is the factory function for initialization.
 func NewExpr(value int) *Expr {
@@ -91,34 +118,19 @@ func (x *Expr) String() string {
 		bl2 + x.right.String() + br2
 }
 
-func expr_eval(x *Expr) (ret int, ok bool) {
+func expr_eval(x *Expr) (ret int) {
 	if x.op == op_num {
-		return x.value, true
+		return x.value
 	}
 
-	l, lok := expr_eval(x.left)
-	r, rok := expr_eval(x.right)
-	if !(lok && rok) {
-		return 0, false
+	l, r := expr_eval(x.left), expr_eval(x.right)
+	// all negative results are considered invalid
+	// all values over calc_range are way too big to reach the valid solution
+	if l < 0 || r < 0 || l > calc_range || r > calc_range {
+		return -1
 	}
 
-	switch x.op {
-	case op_add:
-		return l + r, true
-
-	case op_sub:
-		return l - r, true
-
-	case op_mul:
-		return l * r, true
-
-	case op_div:
-		if r == 0 || l%r != 0 {
-			return 0, false
-		}
-		return l / r, true
-	}
-	return 0, false
+	return calc[x.op][l][r]
 }
 
 // Solve is key function to solve the 24 game
@@ -126,8 +138,7 @@ func Solve(ex_in []*Expr) bool {
 	// only one expression left, meaning all numbers are arranged into
 	// a binary tree, so evaluate and see if we get 24
 	if len(ex_in) == 1 {
-		r, ok := expr_eval(ex_in[0])
-		if ok && r == goal {
+		if expr_eval(ex_in[0]) == goal {
 			fmt.Println(ex_in[0].String())
 			return true
 		}
