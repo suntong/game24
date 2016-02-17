@@ -151,7 +151,7 @@ func Solve(ex_in []*Expr) bool {
 	// try to combine a pair of expressions into one, thus reduce
 	// the list length by 1, and recurse down
 	for i := range ex {
-		copy(ex[i:len(ex)], ex_in[i+1:len(ex_in)])
+		copy(ex[i:], ex_in[i+1:])
 
 		ex[i] = &node
 		for j := i + 1; j < len(ex_in); j++ {
