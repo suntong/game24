@@ -1,14 +1,14 @@
 ////////////////////////////////////////////////////////////////////////////
 // Porgram: game24.go
-// Purpose: Play the 24 game (http://rosettacode.org/wiki/24_game)
+// Purpose: package for playing the 24 game
 // Authors: Tong Sun (c) 2016, All rights reserved
 // Credits: http://rosettacode.org/wiki/24_game/Solve#Go
 ////////////////////////////////////////////////////////////////////////////
 
 /*
-package game24 provides go solution to the 24 game.
+package game24 provides fast solution to the 24 game (http://rosettacode.org/wiki/24_game).
 
-The 24 game is a card game that, with a given four cards (numbers, each from 1 to 9), create an expression using any elementary operators (+, -, *, /), containing only these numbers, exactly once each, such that the result is 24.
+In brief, the 24 game is a card game that, with a given four cards (numbers, each from 1 to 9), create an expression using any elementary operators (+, -, *, /), containing only these numbers, exactly once each, such that the result is 24.
 */
 package game24
 
