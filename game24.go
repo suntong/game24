@@ -43,7 +43,7 @@ type Expr struct {
 var nCards = 4
 var goal = 24
 
-var calc [opDiv + 1][calcRange + 1][calc_range + 1]int
+var calc [opDiv + 1][calcRange + 1][calcRange + 1]int
 
 ////////////////////////////////////////////////////////////////////////////
 // Function definitions
@@ -123,10 +123,10 @@ func exprEval(x *Expr) (ret int) {
 		return x.value
 	}
 
-	l, r := exprEval(x.left), expr_eval(x.right)
+	l, r := exprEval(x.left), exprEval(x.right)
 	// all negative results are considered invalid
 	// all values over calcRange are way too big to reach the valid solution
-	if l < 0 || r < 0 || l > calcRange || r > calc_range {
+	if l < 0 || r < 0 || l > calcRange || r > calcRange {
 		return -1
 	}
 
