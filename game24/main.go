@@ -30,8 +30,11 @@ func Play() {
 		for i := 0; i < n_cards; i++ {
 			cards[i] = game24.NewExpr(rand.Intn(digit_range-1) + 1)
 			fmt.Printf(" %d", cards[i].Value())
+			if i == 1 {
+				fmt.Print("\n")
+			}
 		}
-		fmt.Print(":  ")
+		fmt.Print(":\n  ")
 		if !game24.Solve(cards) {
 			fmt.Println("No solution")
 		}
