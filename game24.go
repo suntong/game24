@@ -133,13 +133,19 @@ func exprEval(x *Expr) (ret int) {
 	return calc[x.op][l][r]
 }
 
+func Resolve(exIn []*Expr) {
+	if !Solve(exIn) {
+		fmt.Println("-XX")
+	}
+}
+
 // Solve is key function to solve the 24 game
 func Solve(exIn []*Expr) bool {
 	// only one expression left, meaning all numbers are arranged into
 	// a binary tree, so evaluate and see if we get 24
 	if len(exIn) == 1 {
 		if exprEval(exIn[0]) == goal {
-			fmt.Println(exIn[0].String())
+			fmt.Printf("-!!\n:%s\n", exIn[0].String())
 			return true
 		}
 		return false

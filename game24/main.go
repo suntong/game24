@@ -27,6 +27,7 @@ func Play() {
 	rand.Seed(time.Now().Unix())
 
 	for k := 0; k < 30; k++ {
+		fmt.Println()
 		for i := 0; i < nCards; i++ {
 			cards[i] = game24.NewExpr(rand.Intn(digitRange) + 1)
 			fmt.Printf(" %d", cards[i].Value())
@@ -34,10 +35,8 @@ func Play() {
 				fmt.Print("\n")
 			}
 		}
-		fmt.Print(":\n  ")
-		if !game24.Solve(cards) {
-			fmt.Println("No solution")
-		}
+		fmt.Println()
+		game24.Resolve(cards)
 	}
 }
 
