@@ -14,12 +14,19 @@ package game24
 
 import (
 	"fmt"
+	"math/rand"
+	"time"
 )
 
 ////////////////////////////////////////////////////////////////////////////
 // Constant and data type/structure definitions
 
-const calcRange = 99
+const (
+  nCards = 4
+  digitRange = 9
+  goal = 24
+  calcRange = 99
+)
 
 const (
 	opNum = iota
@@ -39,9 +46,6 @@ type Expr struct {
 
 ////////////////////////////////////////////////////////////////////////////
 // Global variables definitions
-
-var nCards = 4
-var goal = 24
 
 var calc [opDiv + 1][calcRange + 1][calcRange + 1]int
 
@@ -193,4 +197,23 @@ func Solve(exIn []*Expr) bool {
 		ex[i] = exIn[i]
 	}
 	return false
+}
+
+// Play is for playing the game
+func Play() {
+	cards := make([]*Expr, nCards)
+	rand.Seed(time.Now().Unix())
+
+	for k := 0; k < 30; k++ {
+		fmt.Println()
+		for i := 0; i < nCards; i++ {
+			cards[i] = NewExpr(rand.Intn(digitRange) + 1)
+			fmt.Printf(" %d", cards[i].Value())
+			if i == 1 {
+				fmt.Print("\n")
+			}
+		}
+		fmt.Println()
+		Resolve(cards)
+	}
 }
