@@ -14,6 +14,7 @@ package game24
 
 import (
 	"fmt"
+	"io"
 	"math/rand"
 	"time"
 )
@@ -22,10 +23,10 @@ import (
 // Constant and data type/structure definitions
 
 const (
-  nCards = 4
-  digitRange = 9
-  goal = 24
-  calcRange = 99
+	nCards     = 4
+	digitRange = 9
+	goal       = 24
+	calcRange  = 99
 )
 
 const (
@@ -35,6 +36,13 @@ const (
 	opMul
 	opDiv
 )
+
+// Game controls the 24 game and solution generator
+type Game struct {
+	GameC   int
+	FileO   io.Writer
+	Verbose int
+}
 
 // Expr is for Expression: it can either be a single number, or a result of
 // binary operation from left and right node
@@ -52,7 +60,13 @@ var calc [opDiv + 1][calcRange + 1][calcRange + 1]int
 ////////////////////////////////////////////////////////////////////////////
 // Function definitions
 
-func init() {
+// NewGame is the factory function for Game initialization.
+func NewGame(n int, o io.Writer) *Game {
+	calcInit()
+	return &Game{GameC: n, FileO: o}
+}
+
+func calcInit() {
 	for op := opAdd; op <= opDiv; op++ {
 		for i := 0; i <= calcRange; i++ {
 			for j := 0; j <= calcRange; j++ {
@@ -137,19 +151,19 @@ func exprEval(x *Expr) (ret int) {
 	return calc[x.op][l][r]
 }
 
-func Resolve(exIn []*Expr) {
-	if !Solve(exIn) {
-		fmt.Println("-XX")
+func (g *Game) Resolve(exIn []*Expr) {
+	if !g.Solve(exIn) {
+		fmt.Fprintln(g.FileO, "-XX")
 	}
 }
 
 // Solve is key function to solve the 24 game
-func Solve(exIn []*Expr) bool {
+func (g *Game) Solve(exIn []*Expr) bool {
 	// only one expression left, meaning all numbers are arranged into
 	// a binary tree, so evaluate and see if we get 24
 	if len(exIn) == 1 {
 		if exprEval(exIn[0]) == goal {
-			fmt.Printf("-!!\n:%s\n", exIn[0].String())
+			fmt.Fprintf(g.FileO, "-!!\n:%s\n", exIn[0].String())
 			return true
 		}
 		return false
@@ -171,7 +185,7 @@ func Solve(exIn []*Expr) bool {
 			// try all 4 operators
 			for o := opAdd; o <= opDiv; o++ {
 				node.op = o
-				if Solve(ex) {
+				if g.Solve(ex) {
 					return true
 				}
 			}
@@ -181,12 +195,12 @@ func Solve(exIn []*Expr) bool {
 			node.right = exIn[i]
 
 			node.op = opSub
-			if Solve(ex) {
+			if g.Solve(ex) {
 				return true
 			}
 
 			node.op = opDiv
-			if Solve(ex) {
+			if g.Solve(ex) {
 				return true
 			}
 
@@ -200,20 +214,20 @@ func Solve(exIn []*Expr) bool {
 }
 
 // Play is for playing the game
-func Play() {
+func (g *Game) Play() {
 	cards := make([]*Expr, nCards)
 	rand.Seed(time.Now().Unix())
 
-	for k := 0; k < 30; k++ {
-		fmt.Println()
+	for k := 0; k < g.GameC; k++ {
+		fmt.Fprintln(g.FileO)
 		for i := 0; i < nCards; i++ {
 			cards[i] = NewExpr(rand.Intn(digitRange) + 1)
-			fmt.Printf(" %d", cards[i].Value())
+			fmt.Fprintf(g.FileO, " %d", cards[i].Value())
 			if i == 1 {
-				fmt.Print("\n")
+				fmt.Fprint(g.FileO, "\n")
 			}
 		}
-		fmt.Println()
-		Resolve(cards)
+		fmt.Fprintln(g.FileO)
+		g.Resolve(cards)
 	}
 }

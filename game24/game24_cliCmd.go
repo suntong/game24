@@ -7,20 +7,17 @@
 package main
 
 import (
-	"fmt"
-
 	"github.com/mkideal/cli"
-  g24 "github.com/suntong/game24"
+	g24 "github.com/suntong/game24"
 )
 
 //==========================================================================
 // Main dispatcher
 
 func game24(ctx *cli.Context) error {
-	ctx.JSON(ctx.RootArgv())
-	ctx.JSON(ctx.Argv())
-	fmt.Println()
+	rootArgv = ctx.RootArgv().(*rootT)
 
-  g24.Play()
+	g := g24.NewGame(rootArgv.GameC, rootArgv.FileO)
+	g.Play()
 	return nil
 }
