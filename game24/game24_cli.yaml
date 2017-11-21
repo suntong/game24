@@ -1,0 +1,35 @@
+# program name, name for the executable
+ProgramName: game24
+
+PackageName: main
+
+Name: game24
+Desc: "game 24"
+Text: The 24 game and solution generator
+NumOption: cli.AtLeast(1)
+#NumArg: cli.AtLeast(1)
+#Global: true
+# this (Self) means that root option is using the self-config .json file
+#Self: true
+
+UsageLead: "Usage:\\n  game24 [Options] -o [file]"
+
+Options:
+  - Name: GameC
+    Type: int
+    Flag: n,num
+    Usage: this number of games to generate
+    Value: 30
+
+  - Name: FileO
+    Type: '*clix.Writer'
+    Flag: o,output
+    Usage: 'The output (file) (default: stdout)'
+
+  - Name: Verbose
+    Type: cli.Counter
+    Flag: v,verbose
+    Usage: Verbose mode (Multiple -v options increase the verbosity.)
+
+
+
