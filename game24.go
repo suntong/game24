@@ -37,7 +37,7 @@ type Game struct {
 
 // NewGame is the factory function for Game initialization.
 func NewGame(n int, o io.Writer) *Game {
-	calcInit()
+	CalcInit()
 	return &Game{GameC: n, FileO: o}
 }
 

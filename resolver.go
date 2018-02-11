@@ -45,7 +45,7 @@ var calc [opDiv + 1][calcRange + 1][calcRange + 1]int
 ////////////////////////////////////////////////////////////////////////////
 // Function definitions
 
-func calcInit() {
+func CalcInit() {
 	for op := opAdd; op <= opDiv; op++ {
 		for i := 0; i <= calcRange; i++ {
 			for j := 0; j <= calcRange; j++ {
