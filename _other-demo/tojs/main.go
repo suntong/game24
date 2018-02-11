@@ -15,9 +15,8 @@ import (
 // Global variables definitions
 
 const nCards = 4
-const digitRange = 9
 
-var rand int
+var rand_digitRange int
 
 func main() {
 	game24.CalcInit()
@@ -27,12 +26,11 @@ func main() {
 // Play is for playing the game
 func Play() {
 	cards := make([]*game24.Expr, nCards)
-	// rand.Seed(time.Now().Unix())
 
 	for k := 0; k < 30; k++ {
 		println()
 		for i := 0; i < nCards; i++ {
-			cards[i] = game24.NewExpr(rand + 1)
+			cards[i] = game24.NewExpr(rand_digitRange + 1)
 			print(cards[i].Value())
 			if i == 1 {
 				println()
