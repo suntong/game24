@@ -4,7 +4,7 @@
 // Authors: Tong Sun (c) 2018, All rights reserved
 ////////////////////////////////////////////////////////////////////////////
 
-package game24
+package libs
 
 import (
 	"math/rand"
@@ -15,14 +15,14 @@ import (
 ////////////////////////////////////////////////////////////////////////////
 // Function definitions
 
-func int2str(i int) string {
+func Int2Str(i int) string {
 	return strconv.Itoa(i)
 }
 
-func randi() {
+func RandI() {
 	rand.Seed(time.Now().Unix())
 }
 
-func randn(i int) int {
+func RandN(i int) int {
 	return rand.Intn(i)
 }

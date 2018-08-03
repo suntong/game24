@@ -11,6 +11,8 @@ package game24 provides fast solution to the 24 game
 
 package game24
 
+import "github.com/suntong/game24/str/libs"
+
 ////////////////////////////////////////////////////////////////////////////
 // Constant and data type/structure definitions
 
@@ -53,7 +55,7 @@ func (x *Expr) Value() int {
 // String will convert the expression tree into infix expression string.
 func (x *Expr) String() string {
 	if x.op == Op_num {
-		return int2str(x.value)
+		return libs.Int2Str(x.value)
 	}
 
 	var bl1, br1, bl2, br2, opstr string
@@ -175,15 +177,15 @@ func Solve(ex_in []*Expr) (string, bool) {
 
 // Play is for playing the game
 func Play(n int) string {
-	randi()
+	libs.RandI()
 	cards := make([]*Expr, n_cards)
 
 	r := ""
 	for k := 0; k < n; k++ {
 		r += "\n"
 		for i := 0; i < n_cards; i++ {
-			cards[i] = NewExpr(Op_num, nil, nil, randn(digit_range-1)+1)
-			r += " " + int2str(cards[i].Value())
+			cards[i] = NewExpr(Op_num, nil, nil, libs.RandN(digit_range-1)+1)
+			r += " " + libs.Int2Str(cards[i].Value())
 			if i == 1 {
 				r += "\n"
 			}
