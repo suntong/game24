@@ -186,16 +186,19 @@ func Play(n int) string {
 
 	r := ""
 	for k := 0; k < n; k++ {
+		r += "\n"
 		for i := 0; i < n_cards; i++ {
 			cards[i] =
 				NewExpr(Op_num, nil, nil, rand.Intn(digit_range-1)+1)
 			r += " " + strconv.Itoa(cards[i].Value())
+			if i == 1 {
+				r += "\n"
+			}
 		}
-		r += ":  "
 		if s, ok := Solve(cards); ok {
-			r += s
+			r += "\n- !!\n: " + s
 		} else {
-			r += "No solution\n"
+			r += "\n- XX\n"
 		}
 	}
 
