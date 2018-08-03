@@ -10,7 +10,7 @@ package main
 import (
 	"fmt"
 
-	game24 "github.com/suntong/game24/forjs"
+	game24 "github.com/suntong/game24/str"
 )
 
 ////////////////////////////////////////////////////////////////////////////
