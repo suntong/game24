@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////
 // Porgram: game24.go
 // Purpose: Play the 24 game (http://rosettacode.org/wiki/24_game)
-// Authors: Tong Sun (c) 2016, All rights reserved
+// Authors: Tong Sun (c) 2016-2018, All rights reserved
 // Credits: http://rosettacode.org/wiki/24_game/Solve#Go
 ////////////////////////////////////////////////////////////////////////////
 
@@ -10,12 +10,6 @@ package game24 provides fast solution to the 24 game
 */
 
 package game24
-
-import (
-	"math/rand"
-	"strconv"
-	"time"
-)
 
 ////////////////////////////////////////////////////////////////////////////
 // Constant and data type/structure definitions
@@ -45,18 +39,6 @@ type Expr struct {
 
 ////////////////////////////////////////////////////////////////////////////
 // Function definitions
-
-func int2str(i int) string {
-	return strconv.Itoa(i)
-}
-
-func randi() {
-	rand.Seed(time.Now().Unix())
-}
-
-func randn(i int) int {
-	return rand.Intn(i)
-}
 
 // NewExpr is the factory function for initialization.
 func NewExpr(op int, left, right *Expr, value int) *Expr {

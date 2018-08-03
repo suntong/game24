@@ -1,0 +1,28 @@
+////////////////////////////////////////////////////////////////////////////
+// Porgram: libs
+// Purpose: insulation go lib from game24.go code
+// Authors: Tong Sun (c) 2018, All rights reserved
+////////////////////////////////////////////////////////////////////////////
+
+package game24
+
+import (
+	"math/rand"
+	"strconv"
+	"time"
+)
+
+////////////////////////////////////////////////////////////////////////////
+// Function definitions
+
+func int2str(i int) string {
+	return strconv.Itoa(i)
+}
+
+func randi() {
+	rand.Seed(time.Now().Unix())
+}
+
+func randn(i int) int {
+	return rand.Intn(i)
+}
