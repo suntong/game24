@@ -17,5 +17,6 @@ import (
 // Global variables definitions
 
 func main() {
-	fmt.Println(game24.Play(30))
+	r := game24.Play(30)
+	fmt.Println(r)
 }

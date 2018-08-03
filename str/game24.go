@@ -46,6 +46,18 @@ type Expr struct {
 ////////////////////////////////////////////////////////////////////////////
 // Function definitions
 
+func int2str(i int) string {
+	return strconv.Itoa(i)
+}
+
+func randi() {
+	rand.Seed(time.Now().Unix())
+}
+
+func randn(i int) int {
+	return rand.Intn(i)
+}
+
 // NewExpr is the factory function for initialization.
 func NewExpr(op int, left, right *Expr, value int) *Expr {
 	return &Expr{op, left, right, value}
@@ -59,7 +71,7 @@ func (x *Expr) Value() int {
 // String will convert the expression tree into infix expression string.
 func (x *Expr) String() string {
 	if x.op == Op_num {
-		return strconv.Itoa(x.value)
+		return int2str(x.value)
 	}
 
 	var bl1, br1, bl2, br2, opstr string
@@ -181,16 +193,15 @@ func Solve(ex_in []*Expr) (string, bool) {
 
 // Play is for playing the game
 func Play(n int) string {
+	randi()
 	cards := make([]*Expr, n_cards)
-	rand.Seed(time.Now().Unix())
 
 	r := ""
 	for k := 0; k < n; k++ {
 		r += "\n"
 		for i := 0; i < n_cards; i++ {
-			cards[i] =
-				NewExpr(Op_num, nil, nil, rand.Intn(digit_range-1)+1)
-			r += " " + strconv.Itoa(cards[i].Value())
+			cards[i] = NewExpr(Op_num, nil, nil, randn(digit_range-1)+1)
+			r += " " + int2str(cards[i].Value())
 			if i == 1 {
 				r += "\n"
 			}
