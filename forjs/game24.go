@@ -12,11 +12,17 @@ package game24 provides fast solution to the 24 game
 package game24
 
 import (
-	"fmt"
+	"math/rand"
+	"strconv"
+	"time"
 )
 
 ////////////////////////////////////////////////////////////////////////////
 // Constant and data type/structure definitions
+
+const n_cards = 4
+const digit_range = 9
+const goal = 24
 
 const (
 	Op_num = iota
@@ -37,9 +43,6 @@ type Expr struct {
 ////////////////////////////////////////////////////////////////////////////
 // Global variables definitions
 
-var n_cards = 4
-var goal = 24
-
 ////////////////////////////////////////////////////////////////////////////
 // Function definitions
 
@@ -56,7 +59,7 @@ func (x *Expr) Value() int {
 // String will convert the expression tree into infix expression string.
 func (x *Expr) String() string {
 	if x.op == Op_num {
-		return fmt.Sprintf("%d", x.value)
+		return strconv.Itoa(x.value)
 	}
 
 	var bl1, br1, bl2, br2, opstr string
@@ -121,16 +124,15 @@ func expr_eval(x *Expr) (ret int, ok bool) {
 }
 
 // Solve is key function to solve the 24 game
-func Solve(ex_in []*Expr) bool {
+func Solve(ex_in []*Expr) (string, bool) {
 	// only one expression left, meaning all numbers are arranged into
 	// a binary tree, so evaluate and see if we get 24
 	if len(ex_in) == 1 {
 		r, ok := expr_eval(ex_in[0])
 		if ok && r == goal {
-			fmt.Println(ex_in[0].String())
-			return true
+			return ex_in[0].String() + "\n", true
 		}
-		return false
+		return "", false
 	}
 
 	var node Expr
@@ -149,8 +151,8 @@ func Solve(ex_in []*Expr) bool {
 			// try all 4 operators
 			for o := Op_add; o <= Op_div; o++ {
 				node.op = o
-				if Solve(ex) {
-					return true
+				if s, ok := Solve(ex); ok {
+					return s, true
 				}
 			}
 
@@ -159,13 +161,13 @@ func Solve(ex_in []*Expr) bool {
 			node.right = ex_in[i]
 
 			node.op = Op_sub
-			if Solve(ex) {
-				return true
+			if s, ok := Solve(ex); ok {
+				return s, true
 			}
 
 			node.op = Op_div
-			if Solve(ex) {
-				return true
+			if s, ok := Solve(ex); ok {
+				return s, true
 			}
 
 			if j < len(ex) {
@@ -174,5 +176,28 @@ func Solve(ex_in []*Expr) bool {
 		}
 		ex[i] = ex_in[i]
 	}
-	return false
+	return "", false
+}
+
+// Play is for playing the game
+func Play(n int) string {
+	cards := make([]*Expr, n_cards)
+	rand.Seed(time.Now().Unix())
+
+	r := ""
+	for k := 0; k < n; k++ {
+		for i := 0; i < n_cards; i++ {
+			cards[i] =
+				NewExpr(Op_num, nil, nil, rand.Intn(digit_range-1)+1)
+			r += " " + strconv.Itoa(cards[i].Value())
+		}
+		r += ":  "
+		if s, ok := Solve(cards); ok {
+			r += s
+		} else {
+			r += "No solution\n"
+		}
+	}
+
+	return r
 }
