@@ -11,7 +11,7 @@ package game24 provides fast solution to the 24 game
 
 package game24
 
-import "github.com/suntong/game24/str/libs"
+import "github.com/suntong/game24/g24/libs"
 
 ////////////////////////////////////////////////////////////////////////////
 // Constant and data type/structure definitions
