@@ -181,7 +181,7 @@ func Play(n int) string {
 	cards := make([]*Expr, n_cards)
 
 	r := ""
-	for k := 0; k < n; k++ {
+	for k := 1; k <= n; k++ {
 		r += "\n"
 		for i := 0; i < n_cards; i++ {
 			cards[i] = NewExpr(Op_num, nil, nil, libs.RandN(digit_range-1)+1)
@@ -191,7 +191,7 @@ func Play(n int) string {
 			}
 		}
 		if s, ok := Solve(cards); ok {
-			r += "\n- !!\n: " + s
+			r += "\n- !!\n[" + libs.Int2Str(k) + "]: " + s
 		} else {
 			r += "\n- XX\n"
 		}
