@@ -20,6 +20,10 @@ builds:
       - amd64
       - arm64
 
+    # Path to main.go file or main package.
+    # Default is `.`.
+    main: ./cmd/g24
+
 nfpms:
 - maintainer: Tong Sun <suntong@cpan.org>
   description: game24 - 3 8 24 game
